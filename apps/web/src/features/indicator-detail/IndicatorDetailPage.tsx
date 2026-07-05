@@ -32,6 +32,21 @@ export function IndicatorDetailPage() {
     [detailQuery.data],
   );
 
+  // Financial time series are read as relative movement, not distance from
+  // zero (an FX rate or interest rate of "0" isn't a meaningful reference).
+  // Zoom the axis to the data's own range instead of forcing a zero baseline,
+  // the same convention used by market-data charts (Bloomberg, TradingView).
+  const yDomain = useMemo((): [number, number] => {
+    if (chartData.length === 0) {
+      return [0, 1];
+    }
+    const values = chartData.map((item) => item.value);
+    const dataMin = Math.min(...values);
+    const dataMax = Math.max(...values);
+    const padding = (dataMax - dataMin) * 0.12 || Math.abs(dataMax) * 0.05 || 1;
+    return [dataMin - padding, dataMax + padding];
+  }, [chartData]);
+
   if (detailQuery.isLoading) {
     return <div className="state-panel">Carregando detalhe do indicador...</div>;
   }
@@ -107,6 +122,10 @@ export function IndicatorDetailPage() {
                 stroke="var(--gridline)"
                 tick={{ fill: 'var(--ink-muted)', fontSize: 12 }}
                 width={64}
+                domain={yDomain}
+                tickFormatter={(value: number) =>
+                  value.toLocaleString('pt-BR', { maximumFractionDigits: 2 })
+                }
               />
               <Tooltip
                 cursor={{ stroke: 'var(--ink-muted)', strokeDasharray: '3 3' }}

@@ -6,7 +6,7 @@ FROM base AS deps
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml* ./
 COPY apps/api/package.json ./apps/api/
 COPY packages/shared/package.json ./packages/shared/
-RUN pnpm install --frozen-lockfile || pnpm install
+RUN pnpm install --frozen-lockfile
 
 FROM deps AS builder
 COPY tsconfig.base.json ./
@@ -25,7 +25,6 @@ COPY --from=builder /app/packages/shared/package.json ./packages/shared/package.
 COPY --from=builder /app/apps/api/dist ./apps/api/dist
 COPY --from=builder /app/apps/api/package.json ./apps/api/package.json
 COPY --from=builder /app/apps/api/drizzle ./apps/api/drizzle
-COPY --from=builder /app/apps/api/src/infrastructure/persistence ./apps/api/src/infrastructure/persistence
 WORKDIR /app/apps/api
 EXPOSE 3001
 CMD ["sh", "-c", "node dist/infrastructure/persistence/migrate.js && node dist/infrastructure/persistence/seed.js && node dist/main.js"]

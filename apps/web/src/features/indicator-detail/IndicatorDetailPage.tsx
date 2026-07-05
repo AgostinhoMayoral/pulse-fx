@@ -96,11 +96,41 @@ export function IndicatorDetailPage() {
         <div className="card chart-card">
           <ResponsiveContainer width="100%" height={320}>
             <LineChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-              <XAxis dataKey="date" minTickGap={24} stroke="#94a3b8" />
-              <YAxis stroke="#94a3b8" />
-              <Tooltip />
-              <Line type="monotone" dataKey="value" stroke="#38bdf8" strokeWidth={2} dot={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--gridline)" />
+              <XAxis
+                dataKey="date"
+                minTickGap={24}
+                stroke="var(--gridline)"
+                tick={{ fill: 'var(--ink-muted)', fontSize: 12 }}
+              />
+              <YAxis
+                stroke="var(--gridline)"
+                tick={{ fill: 'var(--ink-muted)', fontSize: 12 }}
+                width={64}
+              />
+              <Tooltip
+                cursor={{ stroke: 'var(--ink-muted)', strokeDasharray: '3 3' }}
+                contentStyle={{
+                  background: 'var(--surface-card-solid)',
+                  border: '1px solid var(--border-hairline)',
+                  borderRadius: '0.75rem',
+                  padding: '0.6rem 0.85rem',
+                }}
+                labelStyle={{ color: 'var(--ink-secondary)', marginBottom: 4, fontSize: '0.8rem' }}
+                itemStyle={{ color: 'var(--ink-primary)', fontWeight: 600 }}
+                formatter={(value: number) => [
+                  value.toLocaleString('pt-BR', { maximumFractionDigits: 4 }),
+                  'Valor',
+                ]}
+              />
+              <Line
+                type="monotone"
+                dataKey="value"
+                stroke="var(--brand)"
+                strokeWidth={2}
+                dot={false}
+                activeDot={{ r: 4, stroke: 'var(--surface-card-solid)', strokeWidth: 2 }}
+              />
             </LineChart>
           </ResponsiveContainer>
         </div>

@@ -2,9 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { formatDate, formatDateTime, formatPercent, formatValue, variationClassName } from './format.js';
 
 describe('format helpers', () => {
-  it('formats positive and negative percentages', () => {
-    expect(formatPercent(1.234)).toBe('+1.23%');
-    expect(formatPercent(-2.5)).toBe('-2.50%');
+  it('formats positive and negative percentages with a direction glyph', () => {
+    expect(formatPercent(1.234)).toBe('▲ +1.23%');
+    expect(formatPercent(-2.5)).toBe('▼ -2.50%');
+    expect(formatPercent(0)).toBe('– 0.00%');
     expect(formatPercent(null)).toBe('N/A');
   });
 

@@ -31,12 +31,12 @@ function renderCard(indicator: IndicatorSummaryDto) {
 describe('IndicatorCard', () => {
   it('renders positive variation', () => {
     renderCard(baseIndicator);
-    expect(screen.getByText('+2.50%')).toHaveClass('variation-positive');
+    expect(screen.getByText('▲ +2.50%')).toHaveClass('variation-positive');
   });
 
   it('renders negative variation', () => {
     renderCard({ ...baseIndicator, percentChange: -1.2 });
-    expect(screen.getByText('-1.20%')).toHaveClass('variation-negative');
+    expect(screen.getByText('▼ -1.20%')).toHaveClass('variation-negative');
   });
 
   it('handles missing variation data', () => {

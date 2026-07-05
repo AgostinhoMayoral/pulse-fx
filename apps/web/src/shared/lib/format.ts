@@ -3,8 +3,13 @@ export function formatPercent(value: number | null | undefined): string {
     return 'N/A';
   }
 
-  const prefix = value > 0 ? '+' : '';
-  return `${prefix}${value.toFixed(2)}%`;
+  if (value > 0) {
+    return `▲ +${value.toFixed(2)}%`;
+  }
+  if (value < 0) {
+    return `▼ ${value.toFixed(2)}%`;
+  }
+  return `– ${value.toFixed(2)}%`;
 }
 
 export function formatValue(value: number | null | undefined, periodicity: 'DAILY' | 'MONTHLY'): string {

@@ -7,6 +7,16 @@ export { buildApp } from './infrastructure/app.js';
 export async function startServer() {
   const { app, config, syncIndicators } = await buildApp();
 
+  if (config.RUN_INITIAL_SYNC) {
+    app.log.info('Running initial data sync before startup');
+    try {
+      const result = await syncIndicators.execute({ force: true });
+      app.log.info({ result }, 'Initial sync completed');
+    } catch (error) {
+      app.log.error({ err: error }, 'Initial sync failed');
+    }
+  }
+
   cron.schedule('0 */6 * * *', () => {
     app.log.info('Starting scheduled sync');
     syncIndicators.execute().catch((error) => {

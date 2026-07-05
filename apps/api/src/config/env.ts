@@ -14,6 +14,7 @@ const envSchema = z.object({
   CORS_ORIGIN: z.string().default('http://localhost:5173'),
   SYNC_TTL_DAILY_HOURS: z.coerce.number().default(6),
   SYNC_TTL_MONTHLY_HOURS: z.coerce.number().default(24),
+  RUN_INITIAL_SYNC: z.coerce.boolean().default(false),
 });
 
 export type AppConfig = z.infer<typeof envSchema>;

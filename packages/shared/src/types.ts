@@ -14,6 +14,7 @@ export interface IndicatorSummaryDto {
   referenceDate: string | null;
   percentChange: number | null;
   comparisonDate: string | null;
+  lastSyncedAt: string | null;
   isFavorite: boolean;
 }
 

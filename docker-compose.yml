@@ -34,6 +34,7 @@ services:
       CORS_ORIGIN: http://localhost:5173
       SYNC_TTL_DAILY_HOURS: 6
       SYNC_TTL_MONTHLY_HOURS: 24
+      RUN_INITIAL_SYNC: 'true'
     ports:
       - '3001:3001'
     healthcheck:
@@ -45,7 +46,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 30s
+      start_period: 120s
 
   web:
     build:

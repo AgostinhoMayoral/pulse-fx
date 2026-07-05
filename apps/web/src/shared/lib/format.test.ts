@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatDate, formatPercent, formatValue, variationClassName } from './format.js';
+import { formatDate, formatDateTime, formatPercent, formatValue, variationClassName } from './format.js';
 
 describe('format helpers', () => {
   it('formats positive and negative percentages', () => {
@@ -15,6 +15,10 @@ describe('format helpers', () => {
 
   it('formats ISO dates to pt-BR', () => {
     expect(formatDate('2026-01-12')).toBe('12/01/2026');
+  });
+
+  it('formats ISO timestamps to pt-BR', () => {
+    expect(formatDateTime('2026-01-12T15:30:00.000Z')).toMatch(/12\/01\/2026/);
   });
 
   it('returns css classes for variation direction', () => {

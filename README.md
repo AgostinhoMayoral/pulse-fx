@@ -22,14 +22,24 @@ Services:
 | API | http://localhost:3001 |
 | Health | http://localhost:3001/health |
 
-Initial sync (protected):
+On first startup, the API runs an **automatic initial sync** (`RUN_INITIAL_SYNC=true` in Docker) before accepting traffic, so the dashboard is populated without manual steps.
+
+Optional manual sync (protected):
 
 ```bash
 curl -X POST http://localhost:3001/admin/sync \
   -H "Authorization: Bearer ${ADMIN_TOKEN}"
 ```
 
-Expected startup time on a typical machine with Docker: **under 15 minutes** including image build, migrations, and seed.
+Expected startup time on a typical machine with Docker: **under 15 minutes** including image build, migrations, seed, and initial sync.
+
+## Screenshots
+
+| Dashboard | Detail (USD/BRL PTAX) |
+|-----------|------------------------|
+| ![Dashboard](docs/screenshots/dashboard.png) | ![Indicator detail](docs/screenshots/detail-usd-brl.png) |
+
+Captured from the local stack after seed + sync (`docker compose up --build` or `pnpm dev:api` + `pnpm dev:web`).
 
 ## Environment variables
 
@@ -42,6 +52,7 @@ Expected startup time on a typical machine with Docker: **under 15 minutes** inc
 | `CORS_ORIGIN` | Allowed frontend origin |
 | `SYNC_TTL_DAILY_HOURS` | TTL for daily indicators before re-sync (default `6`) |
 | `SYNC_TTL_MONTHLY_HOURS` | TTL for monthly indicators before re-sync (default `24`) |
+| `RUN_INITIAL_SYNC` | Run a full sync on API startup (default `false` locally; `true` in Docker) |
 | `VITE_API_URL` | Frontend API base URL |
 
 ## Architecture
@@ -138,12 +149,13 @@ Additional calendar policy:
 
 ## Sync policy
 
-1. Scheduled job every **6 hours** (`node-cron`)
-2. Per-indicator TTL gate before external calls:
+1. **Initial sync on startup** when `RUN_INITIAL_SYNC=true` (enabled in Docker Compose)
+2. Scheduled job every **6 hours** (`node-cron`)
+3. Per-indicator TTL gate before external calls:
    - Daily: `SYNC_TTL_DAILY_HOURS` (default 6h)
    - Monthly: `SYNC_TTL_MONTHLY_HOURS` (default 24h)
-3. Normalized observations upserted with `ON CONFLICT DO UPDATE`
-4. Manual trigger: `POST /admin/sync` with `Authorization: Bearer ${ADMIN_TOKEN}`
+4. Normalized observations upserted with `ON CONFLICT DO UPDATE`
+5. Manual trigger: `POST /admin/sync` with `Authorization: Bearer ${ADMIN_TOKEN}`
 
 ## Local development (without Docker for app code)
 

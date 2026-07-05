@@ -20,6 +20,7 @@ const indicatorSummarySchema = z.object({
   referenceDate: z.string().nullable(),
   percentChange: z.number().nullable(),
   comparisonDate: z.string().nullable(),
+  lastSyncedAt: z.string().nullable(),
   isFavorite: z.boolean(),
 });
 

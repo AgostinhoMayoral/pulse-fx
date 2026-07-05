@@ -16,6 +16,7 @@ const baseIndicator: IndicatorSummaryDto = {
   referenceDate: '2026-01-12',
   percentChange: 2.5,
   comparisonDate: '2026-01-05',
+  lastSyncedAt: '2026-01-12T12:00:00.000Z',
   isFavorite: false,
 };
 

@@ -63,6 +63,7 @@ export class ListIndicatorsUseCase {
           referenceDate: latest ? formatDateOnly(latest.referenceDate) : null,
           percentChange: variation?.percentChange ?? null,
           comparisonDate: variation ? formatDateOnly(variation.comparisonDate) : null,
+          lastSyncedAt: indicator.lastSyncedAt?.toISOString() ?? null,
           isFavorite: favoriteIds.has(indicator.id),
         } satisfies IndicatorSummaryDto;
       }),
@@ -111,6 +112,7 @@ export class GetIndicatorDetailUseCase {
       referenceDate: latest ? formatDateOnly(latest.referenceDate) : null,
       percentChange: variation?.percentChange ?? null,
       comparisonDate: variation ? formatDateOnly(variation.comparisonDate) : null,
+      lastSyncedAt: indicator.lastSyncedAt?.toISOString() ?? null,
       isFavorite,
       observations: history.map((item) => ({
         referenceDate: formatDateOnly(item.referenceDate),

@@ -40,7 +40,8 @@ function startDateForIndicator(indicator: IndicatorEntity): Date {
 export class SyncIndicatorsUseCase {
   constructor(private readonly deps: SyncIndicatorsUseCaseDeps) {}
 
-  async execute(): Promise<SyncResultDto> {
+  async execute(options?: { force?: boolean }): Promise<SyncResultDto> {
+    const force = options?.force ?? this.deps.force ?? false;
     const runId = await this.deps.syncRuns.start('all');
     const allIndicators = await this.deps.indicators.findAll();
     let recordsUpserted = 0;
@@ -54,7 +55,7 @@ export class SyncIndicatorsUseCase {
         this.deps.ttlMonthlyHours,
       );
 
-      if (!this.deps.force && hoursSince(indicator.lastSyncedAt) < ttlHours) {
+      if (!force && hoursSince(indicator.lastSyncedAt) < ttlHours) {
         skippedByTtl += 1;
         continue;
       }

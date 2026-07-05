@@ -1,13 +1,8 @@
-import 'dotenv/config';
-import { resolve } from 'node:path';
-import { config as loadEnv } from 'dotenv';
+import '../../config/load-env.js';
 import { eq } from 'drizzle-orm';
 import { createDb, createPool } from './db.js';
 import { indicators } from './schema.js';
 import { VARIATION_RULES } from '../../domain/calculate-variation.js';
-
-loadEnv({ path: resolve(process.cwd(), '../../.env') });
-loadEnv({ path: resolve(process.cwd(), '.env') });
 
 const databaseUrl = process.env.DATABASE_URL;
 

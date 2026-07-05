@@ -1,7 +1,12 @@
 import { z } from 'zod';
 
 const envSchema = z.object({
-  DATABASE_URL: z.string().url().or(z.string().startsWith('postgresql://')),
+  DATABASE_URL: z
+    .string()
+    .min(1)
+    .refine((value) => value.startsWith('postgresql://'), {
+      message: 'Must be a postgresql:// connection string',
+    }),
   FRED_API_KEY: z.string().min(1),
   ADMIN_TOKEN: z.string().min(8),
   PORT: z.coerce.number().default(3001),

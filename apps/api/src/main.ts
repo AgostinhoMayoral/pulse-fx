@@ -1,3 +1,4 @@
+import './config/load-env.js';
 import cron from 'node-cron';
 import { buildApp } from './infrastructure/app.js';
 

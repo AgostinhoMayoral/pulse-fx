@@ -1,10 +1,5 @@
-import 'dotenv/config';
-import { resolve } from 'node:path';
-import { config as loadEnv } from 'dotenv';
+import '../../config/load-env.js';
 import { runMigrations } from './db.js';
-
-loadEnv({ path: resolve(process.cwd(), '../../.env') });
-loadEnv({ path: resolve(process.cwd(), '.env') });
 
 const databaseUrl = process.env.DATABASE_URL;
 

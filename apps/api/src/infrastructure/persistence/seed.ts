@@ -1,5 +1,4 @@
 import '../../config/load-env.js';
-import { eq } from 'drizzle-orm';
 import { createDb, createPool } from './db.js';
 import { indicators } from './schema.js';
 import { VARIATION_RULES } from '../../domain/calculate-variation.js';

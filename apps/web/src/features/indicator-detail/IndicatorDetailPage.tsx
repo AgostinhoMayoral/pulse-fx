@@ -124,7 +124,7 @@ export function IndicatorDetailPage() {
       {viewMode === 'chart' ? (
         <div className="card chart-card">
           <ResponsiveContainer width="100%" height={320}>
-            <LineChart data={chartData}>
+            <LineChart data={chartData} margin={{ top: 8, right: 12, bottom: 0, left: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--gridline)" />
               <XAxis
                 dataKey="date"

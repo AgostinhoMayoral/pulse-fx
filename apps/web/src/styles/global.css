@@ -171,6 +171,16 @@ a:focus-visible {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
+.dashboard-section + .dashboard-section {
+  margin-top: 2rem;
+}
+
+.section-title {
+  margin: 0 0 1rem;
+  font-size: 1.1rem;
+  color: var(--ink-secondary);
+}
+
 .card {
   background: var(--surface-card);
   border: 1px solid var(--border-hairline);
@@ -204,6 +214,7 @@ a:focus-visible {
 
 .metric-value.large {
   font-size: 2rem;
+  white-space: normal;
 }
 
 .variation-positive {

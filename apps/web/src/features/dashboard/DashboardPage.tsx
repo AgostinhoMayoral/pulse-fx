@@ -1,8 +1,28 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
+import type { IndicatorSummaryDto } from '@pulse-fx/shared';
 import { api } from '../../shared/api/client.js';
 import { formatDateTime } from '../../shared/lib/format.js';
 import { IndicatorCard } from './IndicatorCard.js';
+
+// The flagship pair (USD/BRL) is what most readers open the app for, so it
+// leads its section; anything not listed here falls back to name order
+// instead of disappearing, in case a new indicator is added later.
+const FX_PRIORITY = ['USD_BRL_PTAX', 'EUR_BRL_PTAX'];
+const MACRO_PRIORITY = ['SELIC_META', 'IPCA', 'FEDFUNDS', 'CPI_US'];
+
+function byPriority(order: string[]) {
+  return (a: IndicatorSummaryDto, b: IndicatorSummaryDto) => {
+    const indexA = order.indexOf(a.code);
+    const indexB = order.indexOf(b.code);
+    if (indexA === -1 && indexB === -1) {
+      return a.name.localeCompare(b.name);
+    }
+    if (indexA === -1) return 1;
+    if (indexB === -1) return -1;
+    return indexA - indexB;
+  };
+}
 
 function latestSyncTimestamp(indicators: Array<{ lastSyncedAt: string | null }>): string | null {
   const timestamps = indicators
@@ -59,6 +79,22 @@ export function DashboardPage() {
     [indicatorsQuery.data],
   );
 
+  const fxIndicators = useMemo(
+    () =>
+      (indicatorsQuery.data ?? [])
+        .filter((indicator) => indicator.periodicity === 'DAILY')
+        .sort(byPriority(FX_PRIORITY)),
+    [indicatorsQuery.data],
+  );
+
+  const macroIndicators = useMemo(
+    () =>
+      (indicatorsQuery.data ?? [])
+        .filter((indicator) => indicator.periodicity === 'MONTHLY')
+        .sort(byPriority(MACRO_PRIORITY)),
+    [indicatorsQuery.data],
+  );
+
   if (indicatorsQuery.isLoading) {
     return <div className="state-panel">Carregando indicadores...</div>;
   }
@@ -107,18 +143,41 @@ export function DashboardPage() {
         </div>
       </header>
 
-      <div className="cards-grid">
-        {indicatorsQuery.data.map((indicator) => (
-          <IndicatorCard
-            key={indicator.id}
-            indicator={indicator}
-            isUpdating={favoriteMutation.isPending}
-            onToggleFavorite={(indicatorId, isFavorite) =>
-              favoriteMutation.mutate({ indicatorId, isFavorite })
-            }
-          />
-        ))}
-      </div>
+      {fxIndicators.length > 0 ? (
+        <div className="dashboard-section">
+          <h2 className="section-title">Câmbio</h2>
+          <div className="cards-grid">
+            {fxIndicators.map((indicator) => (
+              <IndicatorCard
+                key={indicator.id}
+                indicator={indicator}
+                isUpdating={favoriteMutation.isPending}
+                onToggleFavorite={(indicatorId, isFavorite) =>
+                  favoriteMutation.mutate({ indicatorId, isFavorite })
+                }
+              />
+            ))}
+          </div>
+        </div>
+      ) : null}
+
+      {macroIndicators.length > 0 ? (
+        <div className="dashboard-section">
+          <h2 className="section-title">Indicadores macroeconômicos</h2>
+          <div className="cards-grid">
+            {macroIndicators.map((indicator) => (
+              <IndicatorCard
+                key={indicator.id}
+                indicator={indicator}
+                isUpdating={favoriteMutation.isPending}
+                onToggleFavorite={(indicatorId, isFavorite) =>
+                  favoriteMutation.mutate({ indicatorId, isFavorite })
+                }
+              />
+            ))}
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 }

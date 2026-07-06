@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { formatDate, formatDateTime, formatPercent, formatValue, variationClassName } from './format.js';
+import {
+  formatDate,
+  formatDateTime,
+  formatPercent,
+  formatSourceLabel,
+  formatValue,
+  formatValueWithUnit,
+  variationClassName,
+} from './format.js';
 
 describe('format helpers', () => {
   it('formats positive and negative percentages with a direction glyph', () => {
@@ -26,5 +34,18 @@ describe('format helpers', () => {
     expect(variationClassName(1)).toBe('variation-positive');
     expect(variationClassName(-1)).toBe('variation-negative');
     expect(variationClassName(null)).toBe('variation-neutral');
+  });
+
+  it('wraps the formatted value with its unit so it never reads as a naked number', () => {
+    expect(formatValueWithUnit(5.9154, 'DAILY', 'R$', null)).toBe('R$ 5,9154');
+    expect(formatValueWithUnit(14.15, 'MONTHLY', null, '% a.a.')).toBe('14,15 % a.a.');
+    expect(formatValueWithUnit(333.98, 'MONTHLY', null, 'pts de índice')).toBe('333,98 pts de índice');
+    expect(formatValueWithUnit(null, 'DAILY', 'R$', null)).toBe('—');
+  });
+
+  it('maps raw source codes to reader-friendly labels', () => {
+    expect(formatSourceLabel('BCB_OLINDA')).toBe('Banco Central (câmbio)');
+    expect(formatSourceLabel('FRED')).toBe('Fed (EUA)');
+    expect(formatSourceLabel('SOME_NEW_SOURCE')).toBe('SOME NEW_SOURCE');
   });
 });

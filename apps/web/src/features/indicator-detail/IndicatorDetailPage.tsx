@@ -11,7 +11,14 @@ import {
   YAxis,
 } from 'recharts';
 import { api } from '../../shared/api/client.js';
-import { formatDate, formatPercent, formatValue, variationClassName } from '../../shared/lib/format.js';
+import {
+  formatDate,
+  formatPercent,
+  formatSourceLabel,
+  formatValue,
+  formatValueWithUnit,
+  variationClassName,
+} from '../../shared/lib/format.js';
 
 export function IndicatorDetailPage() {
   const { code = '' } = useParams();
@@ -56,12 +63,14 @@ export function IndicatorDetailPage() {
   }
 
   const indicator = detailQuery.data;
+  const valueUnitHint = indicator.valuePrefix ?? indicator.valueSuffix;
+  const valueColumnLabel = valueUnitHint ? `Valor (${valueUnitHint})` : 'Valor';
 
   return (
     <section>
       <header className="page-header">
         <div>
-          <p className="eyebrow">{indicator.source.replace('_', ' ')}</p>
+          <p className="eyebrow">{formatSourceLabel(indicator.source)}</p>
           <h1>{indicator.name}</h1>
           <p className="page-subtitle">{indicator.description}</p>
         </div>
@@ -71,7 +80,12 @@ export function IndicatorDetailPage() {
         <div>
           <span className="metric-label">Último valor</span>
           <strong className="metric-value large">
-            {formatValue(indicator.latestValue, indicator.periodicity)}
+            {formatValueWithUnit(
+              indicator.latestValue,
+              indicator.periodicity,
+              indicator.valuePrefix,
+              indicator.valueSuffix,
+            )}
           </strong>
         </div>
         <div>
@@ -138,7 +152,7 @@ export function IndicatorDetailPage() {
                 labelStyle={{ color: 'var(--ink-secondary)', marginBottom: 4, fontSize: '0.8rem' }}
                 itemStyle={{ color: 'var(--ink-primary)', fontWeight: 600 }}
                 formatter={(value: number) => [
-                  value.toLocaleString('pt-BR', { maximumFractionDigits: 4 }),
+                  formatValueWithUnit(value, indicator.periodicity, indicator.valuePrefix, indicator.valueSuffix),
                   'Valor',
                 ]}
               />
@@ -159,7 +173,7 @@ export function IndicatorDetailPage() {
             <thead>
               <tr>
                 <th>Data</th>
-                <th>Valor</th>
+                <th>{valueColumnLabel}</th>
               </tr>
             </thead>
             <tbody>

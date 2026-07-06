@@ -19,6 +19,8 @@ const baseIndicator: IndicatorSummaryDto = {
   lastSyncedAt: '2026-01-12T12:00:00.000Z',
   isFavorite: false,
   sparkline: [5.1, 5.2, 5.35, 5.3, 5.6],
+  valuePrefix: 'R$',
+  valueSuffix: null,
 };
 
 function renderCard(indicator: IndicatorSummaryDto) {
@@ -48,6 +50,12 @@ describe('IndicatorCard', () => {
     });
     expect(screen.getByText('N/A')).toBeInTheDocument();
     expect(screen.getByText('Histórico insuficiente para calcular variação.')).toBeInTheDocument();
+  });
+
+  it('shows the value unit and a reader-friendly source label', () => {
+    renderCard(baseIndicator);
+    expect(screen.getByText('R$ 5,6000')).toBeInTheDocument();
+    expect(screen.getByText('Banco Central (câmbio)')).toBeInTheDocument();
   });
 
   it('renders a sparkline when enough history is available', () => {

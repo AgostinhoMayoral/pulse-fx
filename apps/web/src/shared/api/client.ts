@@ -23,6 +23,8 @@ const indicatorSummarySchema = z.object({
   lastSyncedAt: z.string().nullable(),
   isFavorite: z.boolean(),
   sparkline: z.array(z.number()),
+  valuePrefix: z.string().nullable(),
+  valueSuffix: z.string().nullable(),
 });
 
 const indicatorDetailSchema = indicatorSummarySchema.extend({

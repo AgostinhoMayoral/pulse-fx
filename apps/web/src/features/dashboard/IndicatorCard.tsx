@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import {
   formatDate,
   formatPercent,
-  formatValue,
+  formatSourceLabel,
+  formatValueWithUnit,
   variationClassName,
 } from '../../shared/lib/format.js';
 import { Sparkline, type TrendDirection } from './Sparkline.js';
@@ -26,7 +27,7 @@ export function IndicatorCard({ indicator, onToggleFavorite, isUpdating }: Indic
     <article className="card indicator-card">
       <div className="card-header">
         <div>
-          <p className="eyebrow">{indicator.source.replace('_', ' ')}</p>
+          <p className="eyebrow">{formatSourceLabel(indicator.source)}</p>
           <h2>{indicator.name}</h2>
         </div>
         <button
@@ -47,7 +48,12 @@ export function IndicatorCard({ indicator, onToggleFavorite, isUpdating }: Indic
         <div className="hero-value-block">
           <span className="metric-label">Último valor</span>
           <strong className="hero-value">
-            {formatValue(indicator.latestValue, indicator.periodicity)}
+            {formatValueWithUnit(
+              indicator.latestValue,
+              indicator.periodicity,
+              indicator.valuePrefix,
+              indicator.valueSuffix,
+            )}
           </strong>
           <span className="hero-date">{formatDate(indicator.referenceDate)}</span>
         </div>

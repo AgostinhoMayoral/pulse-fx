@@ -9,6 +9,23 @@ import type {
 
 const SPARKLINE_SAMPLE_SIZE = 20;
 
+interface ValueUnit {
+  prefix?: string;
+  suffix?: string;
+}
+
+// Raw observation values carry no unit on their own (a bare "333.98" reads as
+// nothing in particular to someone outside finance). Attach the unit each
+// series is actually denominated in so the UI never shows a naked number.
+const VALUE_UNITS: Record<string, ValueUnit> = {
+  USD_BRL_PTAX: { prefix: 'R$' },
+  EUR_BRL_PTAX: { prefix: 'R$' },
+  SELIC_META: { suffix: '% a.a.' },
+  IPCA: { suffix: '% a.m.' },
+  FEDFUNDS: { suffix: '% a.a.' },
+  CPI_US: { suffix: 'pts de índice' },
+};
+
 const DATA_LIMITATIONS: Record<string, string> = {
   USD_BRL_PTAX:
     'PTAX is the official BCB closing reference rate, not a live market quote. Weekend and holiday gaps use the last available business-day observation without interpolation.',
@@ -68,6 +85,8 @@ export class ListIndicatorsUseCase {
           lastSyncedAt: indicator.lastSyncedAt?.toISOString() ?? null,
           isFavorite: favoriteIds.has(indicator.id),
           sparkline: history.slice(-SPARKLINE_SAMPLE_SIZE).map((item) => item.value),
+          valuePrefix: VALUE_UNITS[indicator.code]?.prefix ?? null,
+          valueSuffix: VALUE_UNITS[indicator.code]?.suffix ?? null,
         } satisfies IndicatorSummaryDto;
       }),
     );
@@ -118,6 +137,8 @@ export class GetIndicatorDetailUseCase {
       lastSyncedAt: indicator.lastSyncedAt?.toISOString() ?? null,
       isFavorite,
       sparkline: history.slice(-SPARKLINE_SAMPLE_SIZE).map((item) => item.value),
+      valuePrefix: VALUE_UNITS[indicator.code]?.prefix ?? null,
+      valueSuffix: VALUE_UNITS[indicator.code]?.suffix ?? null,
       observations: history.map((item) => ({
         referenceDate: formatDateOnly(item.referenceDate),
         value: item.value,

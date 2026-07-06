@@ -86,4 +86,30 @@ describe('Indicators routes', () => {
 
     expect(response.statusCode).toBe(400);
   });
+
+  it('adds and removes favorites with browser-like delete headers', async () => {
+    const clientId = 'route-test-client';
+
+    const addResponse = await app.inject({
+      method: 'POST',
+      url: '/favorites',
+      headers: {
+        'x-client-id': clientId,
+        'content-type': 'application/json',
+      },
+      payload: { indicatorId },
+    });
+    expect(addResponse.statusCode).toBe(200);
+
+    const deleteResponse = await app.inject({
+      method: 'DELETE',
+      url: `/favorites/${indicatorId}`,
+      headers: {
+        'x-client-id': clientId,
+        'content-type': 'application/json',
+      },
+    });
+    expect(deleteResponse.statusCode).toBe(200);
+    expect(deleteResponse.json()).toEqual({ success: true });
+  });
 });

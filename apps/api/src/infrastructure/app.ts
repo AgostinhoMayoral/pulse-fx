@@ -73,6 +73,22 @@ export async function buildApp(options?: { forceSync?: boolean }) {
     timeWindow: '1 minute',
   });
 
+  // Browsers and fetch clients may send Content-Type: application/json on DELETE
+  // without a body; Fastify 5 rejects that unless we treat it as empty.
+  app.removeContentTypeParser('application/json');
+  app.addContentTypeParser('application/json', { parseAs: 'string' }, (_request, body, done) => {
+    if (body === '' || body === undefined) {
+      done(null, undefined);
+      return;
+    }
+
+    try {
+      done(null, JSON.parse(body as string));
+    } catch (error) {
+      done(error as Error, undefined);
+    }
+  });
+
   await registerRoutes(app, {
     listIndicators: new ListIndicatorsUseCase(indicators, observations, favorites),
     getIndicatorDetail: new GetIndicatorDetailUseCase(indicators, observations, favorites),

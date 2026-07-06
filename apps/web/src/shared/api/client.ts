@@ -55,13 +55,18 @@ class ApiError extends Error {
 }
 
 async function request<T>(path: string, init: RequestInit = {}, schema?: z.ZodType<T>): Promise<T> {
+  const headers: Record<string, string> = {
+    'X-Client-Id': getClientId(),
+    ...(init.headers as Record<string, string> | undefined),
+  };
+
+  if (init.body !== undefined) {
+    headers['Content-Type'] = 'application/json';
+  }
+
   const response = await fetch(`${API_URL}${path}`, {
     ...init,
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Client-Id': getClientId(),
-      ...(init.headers ?? {}),
-    },
+    headers,
   });
 
   if (!response.ok) {

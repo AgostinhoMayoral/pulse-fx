@@ -18,6 +18,7 @@ const baseIndicator: IndicatorSummaryDto = {
   comparisonDate: '2026-01-05',
   lastSyncedAt: '2026-01-12T12:00:00.000Z',
   isFavorite: false,
+  sparkline: [5.1, 5.2, 5.35, 5.3, 5.6],
 };
 
 function renderCard(indicator: IndicatorSummaryDto) {
@@ -47,5 +48,15 @@ describe('IndicatorCard', () => {
     });
     expect(screen.getByText('N/A')).toBeInTheDocument();
     expect(screen.getByText('Histórico insuficiente para calcular variação.')).toBeInTheDocument();
+  });
+
+  it('renders a sparkline when enough history is available', () => {
+    const { container } = renderCard(baseIndicator);
+    expect(container.querySelector('svg.sparkline')).toBeInTheDocument();
+  });
+
+  it('omits the sparkline when history has fewer than two points', () => {
+    const { container } = renderCard({ ...baseIndicator, sparkline: [5.6] });
+    expect(container.querySelector('svg.sparkline')).not.toBeInTheDocument();
   });
 });

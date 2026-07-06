@@ -6,11 +6,19 @@ import {
   formatValue,
   variationClassName,
 } from '../../shared/lib/format.js';
+import { Sparkline, type TrendDirection } from './Sparkline.js';
 
 interface IndicatorCardProps {
   indicator: IndicatorSummaryDto;
   onToggleFavorite: (indicatorId: string, isFavorite: boolean) => void;
   isUpdating?: boolean;
+}
+
+function trendDirection(percentChange: number | null): TrendDirection {
+  if (percentChange === null || percentChange === 0) {
+    return 'neutral';
+  }
+  return percentChange > 0 ? 'up' : 'down';
 }
 
 export function IndicatorCard({ indicator, onToggleFavorite, isUpdating }: IndicatorCardProps) {
@@ -35,32 +43,27 @@ export function IndicatorCard({ indicator, onToggleFavorite, isUpdating }: Indic
 
       <p className="card-description">{indicator.description}</p>
 
-      <div className="metric-grid">
-        <div>
+      <div className="card-hero">
+        <div className="hero-value-block">
           <span className="metric-label">Último valor</span>
-          <strong className="metric-value">
+          <strong className="hero-value">
             {formatValue(indicator.latestValue, indicator.periodicity)}
           </strong>
+          <span className="hero-date">{formatDate(indicator.referenceDate)}</span>
         </div>
-        <div>
-          <span className="metric-label">Data de referência</span>
-          <strong className="metric-value">{formatDate(indicator.referenceDate)}</strong>
-        </div>
-        <div>
-          <span className="metric-label">Variação %</span>
-          <strong className={`metric-value ${variationClassName(indicator.percentChange)}`}>
-            {formatPercent(indicator.percentChange)}
-          </strong>
-        </div>
+        <Sparkline values={indicator.sparkline} direction={trendDirection(indicator.percentChange)} />
       </div>
 
-      {indicator.comparisonDate ? (
-        <p className="comparison-note">
-          Comparado com {formatDate(indicator.comparisonDate)}
-        </p>
-      ) : (
-        <p className="comparison-note">Histórico insuficiente para calcular variação.</p>
-      )}
+      <div className="variation-row">
+        <span className={`variation-chip ${variationClassName(indicator.percentChange)}`}>
+          {formatPercent(indicator.percentChange)}
+        </span>
+        {indicator.comparisonDate ? (
+          <span className="comparison-note">vs. {formatDate(indicator.comparisonDate)}</span>
+        ) : (
+          <span className="comparison-note">Histórico insuficiente para calcular variação.</span>
+        )}
+      </div>
 
       <Link to={`/indicators/${indicator.code}`} className="card-link">
         Ver detalhes

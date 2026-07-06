@@ -24,6 +24,9 @@
   /* Financial status (reserved — never reused as brand/series color) */
   --status-good: #0ca30c;
   --status-critical: #d03b3b;
+  --status-good-soft: rgba(12, 163, 12, 0.14);
+  --status-critical-soft: rgba(208, 59, 59, 0.14);
+  --status-neutral-soft: rgba(195, 194, 183, 0.12);
 
   /* Favorite affordance (UI icon, not a data encoding) */
   --star: #f5b942;
@@ -102,10 +105,19 @@ a:focus-visible {
 
 .brand p,
 .page-subtitle,
-.card-description,
 .comparison-note {
   margin: 0;
   color: var(--ink-secondary);
+}
+
+.card-description {
+  margin: 0;
+  color: var(--ink-secondary);
+  font-size: 0.88rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .main-nav {
@@ -150,7 +162,6 @@ a:focus-visible {
 
 .cards-grid,
 .favorites-list,
-.metric-grid,
 .detail-summary {
   display: grid;
   gap: 1rem;
@@ -177,11 +188,6 @@ a:focus-visible {
   gap: 1rem;
 }
 
-.metric-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  margin: 1rem 0;
-}
-
 .metric-label {
   display: block;
   font-size: 0.8rem;
@@ -200,10 +206,6 @@ a:focus-visible {
   font-size: 2rem;
 }
 
-.metric-grid .metric-value {
-  font-size: 0.95rem;
-}
-
 .variation-positive {
   color: var(--status-good);
 }
@@ -214,6 +216,75 @@ a:focus-visible {
 
 .variation-neutral {
   color: var(--ink-secondary);
+}
+
+.card-hero {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0.9rem 0;
+}
+
+.hero-value-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.hero-value {
+  font-size: 1.85rem;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--ink-primary);
+  white-space: nowrap;
+}
+
+.hero-date {
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+}
+
+.sparkline {
+  flex-shrink: 0;
+}
+
+.variation-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.variation-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.variation-chip.variation-positive {
+  background: var(--status-good-soft);
+  color: var(--status-good);
+}
+
+.variation-chip.variation-negative {
+  background: var(--status-critical-soft);
+  color: var(--status-critical);
+}
+
+.variation-chip.variation-neutral {
+  background: var(--status-neutral-soft);
+  color: var(--ink-secondary);
+}
+
+.variation-row .comparison-note {
+  font-size: 0.8rem;
 }
 
 .favorite-button {
@@ -328,7 +399,8 @@ td {
     align-items: flex-start;
   }
 
-  .metric-grid {
-    grid-template-columns: 1fr;
+  .card-hero {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }

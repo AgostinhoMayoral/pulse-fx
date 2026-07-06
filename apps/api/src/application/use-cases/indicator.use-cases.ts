@@ -7,6 +7,8 @@ import type {
   ObservationRepository,
 } from '../ports/repositories.js';
 
+const SPARKLINE_SAMPLE_SIZE = 20;
+
 const DATA_LIMITATIONS: Record<string, string> = {
   USD_BRL_PTAX:
     'PTAX is the official BCB closing reference rate, not a live market quote. Weekend and holiday gaps use the last available business-day observation without interpolation.',
@@ -65,6 +67,7 @@ export class ListIndicatorsUseCase {
           comparisonDate: variation ? formatDateOnly(variation.comparisonDate) : null,
           lastSyncedAt: indicator.lastSyncedAt?.toISOString() ?? null,
           isFavorite: favoriteIds.has(indicator.id),
+          sparkline: history.slice(-SPARKLINE_SAMPLE_SIZE).map((item) => item.value),
         } satisfies IndicatorSummaryDto;
       }),
     );
@@ -114,6 +117,7 @@ export class GetIndicatorDetailUseCase {
       comparisonDate: variation ? formatDateOnly(variation.comparisonDate) : null,
       lastSyncedAt: indicator.lastSyncedAt?.toISOString() ?? null,
       isFavorite,
+      sparkline: history.slice(-SPARKLINE_SAMPLE_SIZE).map((item) => item.value),
       observations: history.map((item) => ({
         referenceDate: formatDateOnly(item.referenceDate),
         value: item.value,

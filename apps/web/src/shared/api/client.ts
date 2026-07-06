@@ -22,6 +22,7 @@ const indicatorSummarySchema = z.object({
   comparisonDate: z.string().nullable(),
   lastSyncedAt: z.string().nullable(),
   isFavorite: z.boolean(),
+  sparkline: z.array(z.number()),
 });
 
 const indicatorDetailSchema = indicatorSummarySchema.extend({

@@ -16,6 +16,7 @@ export interface IndicatorSummaryDto {
   comparisonDate: string | null;
   lastSyncedAt: string | null;
   isFavorite: boolean;
+  sparkline: number[];
 }
 
 export interface ObservationDto {

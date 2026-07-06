@@ -43,6 +43,14 @@ export default defineConfig({
     testTimeout: 30000,
     hookTimeout: 30000,
     setupFiles: ['./src/test/setup.ts'],
+    // Each integration/repository test file runs its own migrations and
+    // TRUNCATEs against the same shared pulsefx_test database in beforeAll.
+    // singleThread only limits worker processes — it doesn't stop Vitest
+    // from interleaving multiple files' beforeAll hooks, so two files
+    // migrating (or truncating mid-assertion) at once race on a fresh
+    // database. fileParallelism: false forces one file to fully finish
+    // before the next starts.
+    fileParallelism: false,
     poolOptions: {
       threads: {
         singleThread: true,

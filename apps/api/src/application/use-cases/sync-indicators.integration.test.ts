@@ -65,7 +65,7 @@ describe('SyncIndicators integration', () => {
       method: 'POST',
       url: '/admin/sync',
       headers: {
-        authorization: 'Bearer test-admin-token-secure',
+        authorization: `Bearer ${process.env.ADMIN_TOKEN}`,
       },
     });
 
@@ -86,7 +86,7 @@ describe('SyncIndicators integration', () => {
       method: 'POST',
       url: '/admin/sync',
       headers: {
-        authorization: 'Bearer test-admin-token-secure',
+        authorization: `Bearer ${process.env.ADMIN_TOKEN}`,
       },
     });
 

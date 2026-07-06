@@ -22,9 +22,10 @@ export function FavoritesPage() {
       <header className="page-header">
         <div>
           <p className="eyebrow">Meus indicadores</p>
-          <h1>Favoritos persistidos no backend</h1>
+          <h1>Seus indicadores favoritos</h1>
           <p className="page-subtitle">
-            Seus favoritos ficam associados a um identificador anônimo de cliente (`client_id`).
+            Seus favoritos ficam salvos neste navegador e continuam disponíveis mesmo depois de
+            recarregar a página.
           </p>
         </div>
       </header>

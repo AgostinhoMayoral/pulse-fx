@@ -102,7 +102,7 @@ export function DashboardPage() {
   if (indicatorsQuery.isError) {
     return (
       <div className="state-panel state-error">
-        Não foi possível carregar os indicadores. Verifique se a API está disponível.
+        Não foi possível carregar os indicadores. Tente novamente em instantes.
       </div>
     );
   }
@@ -126,9 +126,10 @@ export function DashboardPage() {
       <header className="page-header">
         <div>
           <p className="eyebrow">Dashboard</p>
-          <h1>Indicadores em tempo persistido</h1>
+          <h1>Câmbio e indicadores econômicos</h1>
           <p className="page-subtitle">
-            Valores exibidos vêm do PostgreSQL, sincronizados periodicamente com BCB e FRED.
+            Cotações e indicadores atualizados periodicamente a partir de fontes oficiais: Banco
+            Central e Federal Reserve (FRED).
           </p>
           {lastSyncedAt ? (
             <p className="sync-meta">Última sincronização: {formatDateTime(lastSyncedAt)}</p>

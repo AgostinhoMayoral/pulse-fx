@@ -33,6 +33,12 @@ curl -X POST http://localhost:3001/admin/sync \
 
 Expected startup time on a typical machine with Docker: **under 15 minutes** including image build, migrations, seed, and initial sync.
 
+## Demo video
+
+[Pulse FX — full walkthrough (YouTube)](https://youtu.be/v2Z64T4_P2g) — environment coming up
+from scratch with `docker compose up`, dashboard, indicator detail, favorites persistence, and
+the admin sync endpoint's auth check.
+
 ## Screenshots
 
 | Dashboard | Detail (USD/BRL PTAX) |

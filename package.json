@@ -8,9 +8,9 @@
     "dev:api": "pnpm --filter @pulse-fx/api dev",
     "dev:web": "pnpm --filter @pulse-fx/web dev",
     "build": "pnpm --filter @pulse-fx/shared build && pnpm --filter @pulse-fx/api build && pnpm --filter @pulse-fx/web build",
-    "test": "pnpm --recursive test",
+    "test": "pnpm --filter @pulse-fx/shared build && pnpm --recursive test",
     "lint": "pnpm --recursive lint",
-    "typecheck": "pnpm --recursive typecheck",
+    "typecheck": "pnpm --filter @pulse-fx/shared build && pnpm --recursive typecheck",
     "format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,json,md}\""
   },

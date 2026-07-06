@@ -5,7 +5,7 @@ export function AppLayout() {
     <div className="app-shell">
       <header className="topbar">
         <div className="brand">
-          <span className="brand-mark">PFX</span>
+          <img src="/logo-icon.png" alt="Pulse FX" className="brand-mark" />
           <div>
             <strong>Pulse FX</strong>
             <p>Macro & FX monitor</p>

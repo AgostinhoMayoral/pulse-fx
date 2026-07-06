@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { api } from '../../shared/api/client.js';
+import { formatSourceLabel } from '../../shared/lib/format.js';
 
 export function FavoritesPage() {
   const favoritesQuery = useQuery({
@@ -37,12 +38,12 @@ export function FavoritesPage() {
           {favoritesQuery.data.map((favorite) => (
             <article key={favorite.id} className="card favorite-item">
               <div>
-                <p className="eyebrow">{favorite.source.replace('_', ' ')}</p>
+                <p className="eyebrow">{formatSourceLabel(favorite.source)}</p>
                 <h2>{favorite.name}</h2>
                 <p className="card-description">Código: {favorite.code}</p>
               </div>
               <Link to={`/indicators/${favorite.code}`} className="card-link">
-                Abrir detalhe
+                Abrir detalhe <span aria-hidden="true">→</span>
               </Link>
             </article>
           ))}

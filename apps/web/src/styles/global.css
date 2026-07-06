@@ -215,6 +215,13 @@ a:focus-visible {
 .metric-value.large {
   font-size: 2rem;
   white-space: normal;
+  overflow-wrap: break-word;
+}
+
+.value-unit {
+  font-size: 0.55em;
+  font-weight: 600;
+  color: var(--ink-muted);
 }
 
 .variation-positive {
@@ -231,7 +238,7 @@ a:focus-visible {
 
 .card-hero {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   gap: 1rem;
   margin: 0.9rem 0;
@@ -242,14 +249,16 @@ a:focus-visible {
   flex-direction: column;
   gap: 0.2rem;
   min-width: 0;
+  flex: 1;
 }
 
 .hero-value {
-  font-size: 1.85rem;
+  font-size: 1.6rem;
   font-weight: 700;
-  line-height: 1.15;
+  line-height: 1.25;
   color: var(--ink-primary);
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: break-word;
 }
 
 .hero-date {
@@ -312,8 +321,26 @@ a:focus-visible {
 
 .card-link {
   display: inline-flex;
-  margin-top: 0.75rem;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.9rem;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  background: var(--brand-soft);
+  border: 1px solid var(--brand-border);
   color: var(--brand);
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.card-link:hover {
+  background: var(--brand);
+  color: var(--surface-card-solid);
+  transform: translateX(2px);
 }
 
 .state-panel {

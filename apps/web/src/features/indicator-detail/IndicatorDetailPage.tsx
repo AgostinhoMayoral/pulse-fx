@@ -19,6 +19,7 @@ import {
   formatValueWithUnit,
   variationClassName,
 } from '../../shared/lib/format.js';
+import { ValueWithUnit } from '../../shared/components/ValueWithUnit.js';
 
 export function IndicatorDetailPage() {
   const { code = '' } = useParams();
@@ -79,14 +80,13 @@ export function IndicatorDetailPage() {
       <div className="detail-summary card">
         <div>
           <span className="metric-label">Último valor</span>
-          <strong className="metric-value large">
-            {formatValueWithUnit(
-              indicator.latestValue,
-              indicator.periodicity,
-              indicator.valuePrefix,
-              indicator.valueSuffix,
-            )}
-          </strong>
+          <ValueWithUnit
+            className="metric-value large"
+            value={indicator.latestValue}
+            periodicity={indicator.periodicity}
+            prefix={indicator.valuePrefix}
+            suffix={indicator.valueSuffix}
+          />
         </div>
         <div>
           <span className="metric-label">Referência</span>

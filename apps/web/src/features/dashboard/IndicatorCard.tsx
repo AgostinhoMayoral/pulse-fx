@@ -4,9 +4,9 @@ import {
   formatDate,
   formatPercent,
   formatSourceLabel,
-  formatValueWithUnit,
   variationClassName,
 } from '../../shared/lib/format.js';
+import { ValueWithUnit } from '../../shared/components/ValueWithUnit.js';
 import { Sparkline, type TrendDirection } from './Sparkline.js';
 
 interface IndicatorCardProps {
@@ -47,14 +47,13 @@ export function IndicatorCard({ indicator, onToggleFavorite, isUpdating }: Indic
       <div className="card-hero">
         <div className="hero-value-block">
           <span className="metric-label">Último valor</span>
-          <strong className="hero-value">
-            {formatValueWithUnit(
-              indicator.latestValue,
-              indicator.periodicity,
-              indicator.valuePrefix,
-              indicator.valueSuffix,
-            )}
-          </strong>
+          <ValueWithUnit
+            className="hero-value"
+            value={indicator.latestValue}
+            periodicity={indicator.periodicity}
+            prefix={indicator.valuePrefix}
+            suffix={indicator.valueSuffix}
+          />
           <span className="hero-date">{formatDate(indicator.referenceDate)}</span>
         </div>
         <Sparkline values={indicator.sparkline} direction={trendDirection(indicator.percentChange)} />
@@ -72,7 +71,7 @@ export function IndicatorCard({ indicator, onToggleFavorite, isUpdating }: Indic
       </div>
 
       <Link to={`/indicators/${indicator.code}`} className="card-link">
-        Ver detalhes
+        Ver detalhes <span aria-hidden="true">→</span>
       </Link>
     </article>
   );

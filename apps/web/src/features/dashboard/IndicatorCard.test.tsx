@@ -53,9 +53,15 @@ describe('IndicatorCard', () => {
   });
 
   it('shows the value unit and a reader-friendly source label', () => {
-    renderCard(baseIndicator);
-    expect(screen.getByText('R$ 5,6000')).toBeInTheDocument();
+    const { container } = renderCard(baseIndicator);
+    expect(container.querySelector('.hero-value')?.textContent).toBe('R$ 5,6000');
     expect(screen.getByText('Banco Central (câmbio)')).toBeInTheDocument();
+  });
+
+  it('renders the unit as a de-emphasized suffix, not a naked number', () => {
+    const { container } = renderCard({ ...baseIndicator, valuePrefix: null, valueSuffix: '% a.a.' });
+    expect(container.querySelector('.hero-value')?.textContent).toBe('5,6000 % a.a.');
+    expect(container.querySelector('.value-unit')?.textContent).toBe(' % a.a.');
   });
 
   it('renders a sparkline when enough history is available', () => {

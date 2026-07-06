@@ -19,6 +19,7 @@ import {
   formatValueWithUnit,
   variationClassName,
 } from '../../shared/lib/format.js';
+import { collapseFlatRuns } from '../../shared/lib/chart-data.js';
 import { ValueWithUnit } from '../../shared/components/ValueWithUnit.js';
 
 export function IndicatorDetailPage() {
@@ -31,14 +32,19 @@ export function IndicatorDetailPage() {
     enabled: Boolean(code),
   });
 
-  const chartData = useMemo(
-    () =>
+  const chartData = useMemo(() => {
+    const points =
       detailQuery.data?.observations.map((item) => ({
         date: formatDate(item.referenceDate),
         value: item.value,
-      })) ?? [],
-    [detailQuery.data],
-  );
+      })) ?? [];
+    // Series like Selic publish a point per business day even though the
+    // value only changes on Copom decisions; hundreds of near-duplicate
+    // points crammed into the chart's width degrade rendering (see
+    // shared/lib/chart-data.ts). Collapsing flat runs keeps the exact same
+    // shape with far fewer points.
+    return collapseFlatRuns(points);
+  }, [detailQuery.data]);
 
   // Financial time series are read as relative movement, not distance from
   // zero (an FX rate or interest rate of "0" isn't a meaningful reference).
